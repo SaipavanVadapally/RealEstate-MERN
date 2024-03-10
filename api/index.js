@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import UserRouter from './routes/user.route.js';  // Make sure to adjust the path to your user.route.js file
 
 // Load environment variables from .env file
 dotenv.config();
@@ -12,11 +13,19 @@ mongoose.connect(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => {
     console.log("Connected to MongoDB!!");
     
-    // Your MongoDB-connected code can go here
-    
+    // Create the Express app
     const app = express();
-    app.listen(3000, () => {
-      console.log('Server is running on port 3000!!!!');
+
+    // Middleware to parse JSON
+    //app.use(express.json());
+
+    // Use the UserRoute for /api/user path
+    app.use('/api/user', UserRouter);
+
+    // Start the server
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}!!!!`);
     });
   })
   .catch((err) => {
